@@ -1,0 +1,21 @@
+@import './variables';
+@import './mixins';
+
+.finnished-order-wrapper{
+    text-align: center;
+    padding: 10em 0 5em;
+
+    h1{
+        font-family: $ff;
+        margin-bottom: .6em;
+    }
+
+    span{
+        font-size: 1.5em;
+    }
+
+    img{
+        width: 10em;
+        height: auto;
+    }
+}
