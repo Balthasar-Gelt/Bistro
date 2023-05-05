@@ -23,9 +23,9 @@
             </div>
 
             <ul class="categories" v-show="showCategories">
-                <li v-for="category in categoriesArray">
+                <li @click="getCategoryDishes(category[0])" v-for="category in categoriesArray">
 
-                    <a @click="getCategoryDishes(category[0])">{{ category[1] }}</a>
+                    <a>{{ category[1] }}</a>
 
                 </li>
             </ul>
@@ -64,6 +64,7 @@ export default {
             dishes: [],
             selectedDishes: [],
             sum: 0,
+            message: 0,
         } 
     },
     props: ['link', 'categories', 'showCategories', 'currency'],
@@ -107,11 +108,18 @@ export default {
 
                     arr[e].dish.price = this.formatPrice(arr[e].dish.price);
                     
-                    for (let i = 0; i < arr[e].quantity; i++){
+                    for (let i = 0; i < arr[e].quantity; i++) {
 
                         this.selectedDishes.push(arr[e].dish);
                         this.sumAdd(arr[e].dish.price);
                     }
+                }
+
+                if (isNaN(this.sum)) {
+                    
+                    fetch(this.link + '/cart/empty');
+                    this.selectedDishes = [];
+                    this.sum = 0;
                 }
             });
         },
@@ -120,9 +128,9 @@ export default {
             fetch(this.link + '/cart/add/' + dish.id)
             .then(r => r.json())
             .then(r => {
-                console.log(r);
                 this.selectedDishes.push(dish);
                 this.sumAdd(dish['price']);
+                this.$emit('showMessage', {notificationMessage: 'Dish added to your cart!', class: 'success'});
             });
         },
         formatPrice: function(price){
@@ -133,7 +141,6 @@ export default {
             fetch(this.link + '/cart/delete/' + dishId)
             .then(r => r.json())
             .then(r => {
-                console.log(r);
                 this.sumDec(this.selectedDishes[index]['price']);
                 this.selectedDishes.splice(index,1);
             });

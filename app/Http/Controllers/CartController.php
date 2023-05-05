@@ -33,4 +33,9 @@ class CartController extends Controller
         else
             return [];
     }
+
+    public function emptyCart(){
+
+        session()->forget('cart');
+    }
 }

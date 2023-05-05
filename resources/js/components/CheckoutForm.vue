@@ -1,8 +1,6 @@
 <template>
 
 <div>
-    <div class="error-message" v-show="error != ''">{{error}}</div>
-
     <form id="checkout-form" @submit.prevent="getCSRFToken" method="post">
 
         <input type="hidden" name="_token" :value="csrf">
@@ -157,11 +155,7 @@ export default {
             }
         },
         showError: function(error){
-            this.error = error;
-
-            setTimeout(() => {
-                this.error = '';
-            }, 2000);
+                this.$emit('showError', {notificationMessage: error, class: 'error'});
         },
         toggleInputLabel: function (inputWrapper){
 
@@ -180,18 +174,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-    .error-message{
-        position: fixed;
-        top: 20%;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 99999;
-        padding: 1.3em 1.9em;
-        background-color: red;
-        color: white;
-        font-weight: 600;
-    }
 
     @media (max-width: 410px) {
 

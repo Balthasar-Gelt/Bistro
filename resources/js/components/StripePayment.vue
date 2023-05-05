@@ -24,7 +24,10 @@
 
                 </div>
                 
-                <button class="submit-button" id="submit">Pay</button>
+                <button class="submit-button" id="submit">
+                    <img v-if="isProcessing" id="loading-icon" src="images/loading.gif" alt="loading">
+                    Pay
+                </button>
             </form>
 
         </div>
@@ -58,6 +61,7 @@ export default {
             stripe: null,
             card: null,
             paying: false,
+            isProcessing : false,
         }
     },
     mounted() {
@@ -87,6 +91,7 @@ export default {
             this.form.addEventListener('submit', (e) =>{
 
                 e.preventDefault();
+                this.isProcessing = true;
 
                 if(!this.paying){
                     
@@ -99,8 +104,10 @@ export default {
                     })
                     .then(result => {
 
-                        if (result.error) 
+                        if (result.error){
+                            this.isProcessing = false;
                             this.$emit('showError', result.error.message);
+                        }
 
                         else if (result.paymentIntent.status === 'succeeded')
                             window.location.replace(this.link + '/order/success');

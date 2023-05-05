@@ -23,6 +23,7 @@ Route::get('make-order', [PagesController::class, 'makeOrder']);
 Route::get('cart/add/{id}', [CartController::class, 'addToCart']);
 Route::get('cart/delete/{id}', [CartController::class, 'deleteFromCart']);
 Route::get('cart/show', [CartController::class, 'getCart']);
+Route::get('cart/empty', [CartController::class, 'emptyCart']);
 
 Route::post('order/validate', [OrdersController::class, 'validateOrder']);
 Route::get('order/makePayment/{type}', [OrdersController::class, 'makePayment']);

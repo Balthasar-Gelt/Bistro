@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\Order;
 use App\Cart\Cart;
+use App\Models\Order;
+use App\Jobs\ProcessEmail;
 use App\Mail\OrderCreated;
 use App\Models\OrderedDish;
 use App\Payment\PaymentFactory;
-use Illuminate\Support\Facades\Mail;
 
 class OrderService{
 
@@ -40,17 +40,13 @@ class OrderService{
 
         $order = $this->saveOrder((object)session()->get('orderData'), $this->getOrderTotal());
         $this->saveOrderedItems($this->getOrderItems(), $order->id);
-        
-        $this->sendOrderMail($order->id, $order->email, $this->getOrderTotal(), $this->getOrderItems());
-
+        ProcessEmail::dispatch([
+            'email' => $order->email,
+            'order' => new OrderCreated($this->getOrderItems(), $order->id, $this->getOrderTotal()),
+        ]);
         $this->flushSessions();
 
         return $order->id;
-    }
-
-    private function sendOrderMail($orderId, $orderMail, $orderTotal, $orderedItems){
-
-        Mail::to($orderMail)->send(new OrderCreated($orderedItems, $orderId, $orderTotal));
     }
 
     private function flushSessions(){

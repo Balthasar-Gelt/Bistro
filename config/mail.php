@@ -83,7 +83,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'example@example.com', 'name' => 'App Name'],
+    'from' => ['address' => env('MAIL_FROM_ADDRESS'), 'name' => 'App Name'],
 
     /*
     |--------------------------------------------------------------------------
