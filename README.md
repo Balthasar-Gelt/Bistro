@@ -1,4 +1,4 @@
-This project was built with Vue js and Laravel
+<div>This project was built with Vue js and Laravel</div>
 URL: https://www.budai-portfolio.com
 
 ! IMPORTANT !
