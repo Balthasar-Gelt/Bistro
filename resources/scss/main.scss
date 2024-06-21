@@ -5,3 +5,13 @@
 @import './pages/checkout.scss';
 @import './form.scss';
 @import './buttons';
+
+.is-secondary-color{
+    color: $secondaryColor;    
+}
+
+@media(max-width: 410px) {
+    .full-button {
+        width: 10em;
+    }
+}

@@ -40,10 +40,10 @@ class OrderService{
 
         $order = $this->saveOrder((object)session()->get('orderData'), $this->getOrderTotal());
         $this->saveOrderedItems($this->getOrderItems(), $order->id);
-        ProcessEmail::dispatch([
+        /*ProcessEmail::dispatch([
             'email' => $order->email,
             'order' => new OrderCreated($this->getOrderItems(), $order->id, $this->getOrderTotal()),
-        ]);
+        ]);*/
         $this->flushSessions();
 
         return $order->id;

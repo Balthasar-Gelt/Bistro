@@ -1,69 +1,73 @@
 <template>
+    <div>
+        <h1 class="is-secondary-color">Checkout Form</h1>
 
-<div>
-    <form id="checkout-form" @submit.prevent="getCSRFToken" method="post">
+        <form id="checkout-form" @submit.prevent="getCSRFToken" method="post">
 
-        <input type="hidden" name="_token" :value="csrf">
+            <input type="hidden" name="_token" :value="csrf">
 
-        <div class="form_input form_row">
-            <div v-if="formErrors.email" class="input-error">{{formErrors.email[0]}}</div>
-            <label for="email">Email address</label>
-            <input required class="checkout_input" placeholder="Email address" type="email" id="form_email" name="email" v-model="formInputs.email">
-        </div>
-
-        <div class="form_input form_row">
-            <div v-if="formErrors.name" class="input-error">{{formErrors.name[0]}}</div>
-            <label for="name">Full Name</label>
-            <input required class="checkout_input" placeholder="Full Name" type="text" id="form_name" name="name" v-model="formInputs.name">
-        </div>
-
-        <div class="form-multiple-input-row form_row">
-            <div class="form_input">
-                <div v-if="formErrors.street" class="input-error">{{formErrors.street[0]}}</div>
-                <label for="street">Street address</label>
-                <input required class="checkout_input" placeholder="Street address" type="text" id="form_street" name="street" v-model="formInputs.street">
+            <div class="form_input form_row">
+                <div v-if="formErrors.email" class="input-error">{{ formErrors.email[0] }}</div>
+                <label for="email">Email address</label>
+                <input required class="checkout_input" placeholder="Email address" type="email" id="form_email"
+                    name="email" v-model="formInputs.email">
             </div>
 
-            <div class="form_input">
-                <div v-if="formErrors.postalCode" class="input-error">{{formErrors.postalCode[0]}}</div>
-                <label for="post">Postal Code</label>
-                <input required class="checkout_input" placeholder="Postal Code" type="text" id="form_post" name="postalCode" v-model="formInputs.postalCode">
+            <div class="form_input form_row">
+                <div v-if="formErrors.name" class="input-error">{{ formErrors.name[0] }}</div>
+                <label for="name">Full Name</label>
+                <input required class="checkout_input" placeholder="Full Name" type="text" id="form_name" name="name"
+                    v-model="formInputs.name">
             </div>
-        </div>
 
-        <div class="form_input form_row">
-            <div v-if="formErrors.city" class="input-error">{{formErrors.city[0]}}</div>
-            <label for="city">City</label>
-            <input required class="checkout_input" placeholder="City" type="text" id="form_city" name="city" v-model="formInputs.city">
-        </div>
+            <div class="form-multiple-input-row form_row">
+                <div class="form_input">
+                    <div v-if="formErrors.street" class="input-error">{{ formErrors.street[0] }}</div>
+                    <label for="street">Street address</label>
+                    <input required class="checkout_input" placeholder="Street address" type="text" id="form_street"
+                        name="street" v-model="formInputs.street">
+                </div>
 
-        <div class="form_input select-input form_row" exclude> 
-            <div v-if="formErrors.region" class="input-error">{{formErrors.region[0]}}</div>
-            <select id="select" v-model="selectedRegion" v-on:change="setDelivery" name="region" >
-                <option value="TT">Trnava</option>
-                <option value="BA">Bratislava</option>
-                <option value="TN">Trencin</option>
-                <option value="NA">Nitra</option>
-                <option value="ZA">Zilina</option>
-                <option value="BB">Banska Bystrica</option>
-                <option value="PE">Presov</option>
-                <option value="KE">Kosice</option>
-            </select>
-        </div>
+                <div class="form_input">
+                    <div v-if="formErrors.postalCode" class="input-error">{{ formErrors.postalCode[0] }}</div>
+                    <label for="post">Postal Code</label>
+                    <input required class="checkout_input" placeholder="Postal Code" type="text" id="form_post"
+                        name="postalCode" v-model="formInputs.postalCode">
+                </div>
+            </div>
 
-        <button class="submit-button" id="submit">Submit the Information</button>
+            <div class="form_input form_row">
+                <div v-if="formErrors.city" class="input-error">{{ formErrors.city[0] }}</div>
+                <label for="city">City</label>
+                <input required class="checkout_input" placeholder="City" type="text" id="form_city" name="city"
+                    v-model="formInputs.city">
+            </div>
 
-    </form>
+            <div class="form_input select-input form_row" exclude>
+                <div v-if="formErrors.region" class="input-error">{{ formErrors.region[0] }}</div>
+                <select id="select" v-model="selectedRegion" v-on:change="setDelivery" name="region">
+                    <option value="TT">Trnava</option>
+                    <option value="BA">Bratislava</option>
+                    <option value="TN">Trencin</option>
+                    <option value="NA">Nitra</option>
+                    <option value="ZA">Zilina</option>
+                    <option value="BB">Banska Bystrica</option>
+                    <option value="PE">Presov</option>
+                    <option value="KE">Kosice</option>
+                </select>
+            </div>
 
-    <StripePayment 
-        v-if="wantsToPay" 
-        v-on:cancelPayment="wantsToPay = false"
-        v-on:showError="showError($event)"
-        :link="link"
-        >
-    </StripePayment>
-</div>
+            <div class="button-wrapper">
+                <button class="submit-button" id="submit">Submit the Information</button>
+                <a class="submit-button close" @click="$emit('closeCheckout')">CLOSE CHECKOUT</a>
+            </div>
 
+        </form>
+
+        <StripePayment v-if="wantsToPay" v-on:cancelPayment="wantsToPay = false" v-on:showError="showError($event)"
+            :link="link">
+        </StripePayment>
+    </div>
 </template>
 
 <script>
@@ -72,7 +76,7 @@ import StripePayment from './StripePayment.vue';
 
 export default {
     props: ['link', 'shipping'],
-    components:{
+    components: {
         StripePayment,
     },
     data() {
@@ -87,35 +91,30 @@ export default {
         }
     },
     mounted() {
-
         let mySelect = new vanillaSelectBox("#select", { placeHolder: "Select Region" });
-
         let inputWrappers = document.querySelectorAll('.form_input');
 
         for (const wrapper of inputWrappers) {
-
-            if(!wrapper.hasAttribute('exclude')){
-
+            if (!wrapper.hasAttribute('exclude')) {
                 this.toggleInputLabel(wrapper);
-            
-                wrapper.querySelector('input').addEventListener( 'keyup', () => this.toggleInputLabel(wrapper) );
+                wrapper.querySelector('input').addEventListener('keyup', () => this.toggleInputLabel(wrapper));
             }
         }
     },
-    methods:{
-        setDelivery: function(){
+    methods: {
+        setDelivery: function () {
             this.$emit('setDelivery', Number(this.shipping) / 100);
         },
-        getCSRFToken: function(){
+        getCSRFToken: function () {
             fetch(this.link + '/refresh-csrf')
-            .then(r => r.text())
-            .then(r => this.submitForm(r));
+                .then(r => r.text())
+                .then(r => this.submitForm(r));
         },
-        submitForm: function(token){
+        submitForm: function (token) {
 
             let formData = new FormData(document.querySelector('#checkout-form'));
 
-            if(!this.sending){
+            if (!this.sending) {
 
                 this.sending = true;
 
@@ -124,9 +123,9 @@ export default {
                     headers: {
                         "X-Requested-With": "XMLHttpRequest",
                         "X-CSRF-Token": token,
-                        },
+                    },
                     body: formData,
-                    })
+                })
                     .then(r => r.json())
                     .then(r => {
                         this.handleMessage(r);
@@ -134,7 +133,7 @@ export default {
                     })
             }
         },
-        handleMessage: function(response){
+        handleMessage: function (response) {
 
             switch (response.message) {
                 case 'The given data was invalid.':
@@ -154,18 +153,18 @@ export default {
                     break;
             }
         },
-        showError: function(error){
-                this.$emit('showError', {notificationMessage: error, class: 'error'});
+        showError: function (error) {
+            this.$emit('showError', { notificationMessage: error, class: 'error' });
         },
-        toggleInputLabel: function (inputWrapper){
+        toggleInputLabel: function (inputWrapper) {
 
             let input = inputWrapper.querySelector('input');
             let label = inputWrapper.querySelector('label');
             let inputVal = input.value;
 
-            inputVal = inputVal.replace(/\s/g,'');
+            inputVal = inputVal.replace(/\s/g, '');
 
-            if(label != null)
+            if (label != null)
                 inputVal != '' ? label.style.opacity = '1' : label.style.opacity = '0';
         },
     },
@@ -174,13 +173,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../scss/variables';
+.submit-button.close {
+    background-color: $mainColor;
+    color: white;
+}
 
-    @media (max-width: 410px) {
+@media (max-width: 410px) {
 
-        .submit-button{
-            width: 100%;
-            font-size: .9em;
-        }
+    .submit-button {
+        width: 100%;
     }
-
+}
 </style>
